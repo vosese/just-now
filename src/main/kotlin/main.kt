@@ -1,5 +1,4 @@
 fun main() {
-
     fun secondsToMinute(seconds: Int): String {
         val minutes = seconds / 60
         return when {
@@ -10,12 +9,26 @@ fun main() {
         }
     }
 
-    fun ago(seconds: Int) = when (seconds) {
-        in 0..59 -> "Был(а) в сети недавно"
-        in 60..59 * 60 -> "Был(а) в сети ${seconds / 60} ${secondsToMinute(seconds)} назад"
+    fun minutesToHour(seconds: Int): String {
+        val hour = seconds / 3600
+        return when {
+            hour in 11..14 -> "часов"
+            hour % 10 == 1 -> " час "
+            hour % 10 in 2..4 -> "часа"
+            else -> "часов"
+        }
+    }
+
+    fun agoToText(seconds: Int) = when (seconds) {
+        in 0..60 -> "Был(а) в сети только что"
+        in 61..60 * 60 -> "Был(а) в сети ${seconds / 60} ${secondsToMinute(seconds)} назад"
+        in 60 * 60 + 1..24 * 60 * 60 -> "Был(а) в сети ${seconds / 60 / 60} ${minutesToHour(seconds)} назад"
+        in 24 * 60 * 60 + 1..48 * 60 * 60 -> "Был(а) в сети вчера"
+        in 48 * 60 * 60 + 1..72 * 60 * 60 -> "Был(а) в сети позавчера"
         else -> "Давно"
     }
 
-    println(ago(48))
-    println(ago(1500))
+
+    println(agoToText(120))
+    println(agoToText(14800))
 }
